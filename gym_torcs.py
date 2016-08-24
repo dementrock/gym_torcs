@@ -33,6 +33,8 @@ class TorcsEnv:
 
         ##print("launch torcs")
         os.system('pkill torcs')
+        os.system('pkill pulseaudio')
+        os.system('pulseaudio -D --system')
         time.sleep(0.5)
         if self.vision is True:
             os.system(self.xvfb_command + ' torcs -nofuel -nodamage -nolaptime  -vision &')
@@ -208,6 +210,8 @@ class TorcsEnv:
     def reset_torcs(self):
        #print("relaunch torcs")
         os.system('pkill torcs')
+        os.system('pkill pulseaudio')
+        os.system('pulseaudio -D --system')
         time.sleep(0.5)
         if self.vision is True:
             os.system(self.xvfb_command + ' torcs -nofuel -nodamage -nolaptime -vision &')

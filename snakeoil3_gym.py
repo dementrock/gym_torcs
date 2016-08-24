@@ -175,6 +175,8 @@ class Client():
                 if n_fail < 0:
                     print("relaunch torcs")
                     os.system('pkill torcs')
+                    os.system('pkill pulseaudio')
+                    os.system('pulseaudio -D --system')
                     time.sleep(1.0)
                     if self.vision is False:
                         os.system(self.xvfb_command + ' torcs -nofuel -nodamage -nolaptime &')
