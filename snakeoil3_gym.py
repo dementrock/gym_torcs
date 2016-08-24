@@ -53,6 +53,7 @@
 # Try `snakeoil.py --help` to get started.
 
 # for Python3-based torcs python robot client
+from __future__ import print_function
 import socket
 import sys
 import getopt
@@ -116,7 +117,7 @@ def bargraph(x,mn,mx,w,c='X'):
     return '[%s]' % (nnc+npc+ppc+pnc)
 
 class Client():
-    def __init__(self,H=None,p=None,i=None,e=None,t=None,s=None,d=None,vision=False):
+    def __init__(self,H=None,p=None,i=None,e=None,t=None,s=None,d=None,vision=False, xvfb_command=''):
         # If you don't like the option defaults,  change them here.
         self.vision = vision
 
@@ -129,6 +130,7 @@ class Client():
         self.debug= False
         self.maxSteps= 100000  # 50steps/second
         self.parse_the_command_line()
+        self.xvfb_command = xvfb_command
         if H: self.host= H
         if p: self.port= p
         if i: self.sid= i
@@ -175,10 +177,9 @@ class Client():
                     os.system('pkill torcs')
                     time.sleep(1.0)
                     if self.vision is False:
-                        os.system('torcs -nofuel -nodamage -nolaptime &')
+                        os.system(self.xvfb_command + ' torcs -nofuel -nodamage -nolaptime &')
                     else:
-                        os.system('torcs -nofuel -nodamage -nolaptime -vision &')
-
+                        os.system(self.xvfb_command + ' torcs -nofuel -nodamage -nolaptime -vision &')
                     time.sleep(1.0)
                     os.system('sh autostart.sh')
                     n_fail = 5
@@ -513,18 +514,21 @@ class DriverAction():
 def destringify(s):
     '''makes a string into a value or a list of strings into a list of
     values (if possible)'''
-    if not s: return s
-    if type(s) is str:
+    if s is None: return s
+    if isinstance(s, basestring):
         try:
             return float(s)
         except ValueError:
             print("Could not find a value in %s" % s)
             return s
-    elif type(s) is list:
+    elif isinstance(s, list):
         if len(s) < 2:
             return destringify(s[0])
         else:
             return [destringify(i) for i in s]
+    else:
+        print("exceptional:", repr(s), type(s))
+        return s
 
 def drive_example(c):
     '''This is only an example. It will get around the track but the

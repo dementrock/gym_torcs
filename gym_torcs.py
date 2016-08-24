@@ -18,21 +18,26 @@ class TorcsEnv:
     initial_reset = True
 
 
-    def __init__(self, vision=False, throttle=False, gear_change=False):
+    def __init__(self, vision=False, throttle=False, gear_change=False, xvfb=False):
        #print("Init")
         self.vision = vision
         self.throttle = throttle
         self.gear_change = gear_change
 
         self.initial_run = True
+        if xvfb:
+            xvfb_command = "xvfb-run -a -s \"-ac -screen 0 1400x900x24 +extension RANDR\" -- "
+        else:
+            xvfb_command = ""
+        self.xvfb_command = xvfb_command
 
         ##print("launch torcs")
         os.system('pkill torcs')
         time.sleep(0.5)
         if self.vision is True:
-            os.system('torcs -nofuel -nodamage -nolaptime  -vision &')
+            os.system(self.xvfb_command + ' torcs -nofuel -nodamage -nolaptime  -vision &')
         else:
-            os.system('torcs  -nofuel -nodamage -nolaptime &')
+            os.system(self.xvfb_command + ' torcs -nofuel -nodamage -nolaptime &')
         time.sleep(0.5)
         os.system('sh autostart.sh')
         time.sleep(0.5)
@@ -180,7 +185,7 @@ class TorcsEnv:
                 print("### TORCS is RELAUNCHED ###")
 
         # Modify here if you use multiple tracks in the environment
-        self.client = snakeoil3.Client(p=3101, vision=self.vision)  # Open new UDP in vtorcs
+        self.client = snakeoil3.Client(p=3101, vision=self.vision, xvfb_command=self.xvfb_command)  # Open new UDP in vtorcs
         self.client.MAX_STEPS = np.inf
 
         client = self.client
@@ -205,9 +210,9 @@ class TorcsEnv:
         os.system('pkill torcs')
         time.sleep(0.5)
         if self.vision is True:
-            os.system('torcs -nofuel -nodamage -nolaptime -vision &')
+            os.system(self.xvfb_command + ' torcs -nofuel -nodamage -nolaptime -vision &')
         else:
-            os.system('torcs -nofuel -nodamage -nolaptime &')
+            os.system(self.xvfb_command + ' torcs -nofuel -nodamage -nolaptime &')
         time.sleep(0.5)
         os.system('sh autostart.sh')
         time.sleep(0.5)
