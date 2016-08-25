@@ -129,7 +129,7 @@ class Client():
         self.stage= 3 # 0=Warm-up, 1=Qualifying 2=Race, 3=unknown <Default=3>
         self.debug= False
         self.maxSteps= 100000  # 50steps/second
-        self.parse_the_command_line()
+        # self.parse_the_command_line()
         self.xvfb_command = xvfb_command
         if H: self.host= H
         if p: self.port= p
