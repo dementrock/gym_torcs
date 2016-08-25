@@ -41,7 +41,7 @@ class TorcsEnv:
         else:
             os.system(self.xvfb_command + ' torcs -nofuel -nodamage -nolaptime &')
         time.sleep(0.5)
-        os.system('sh autostart.sh')
+        os.system('sh /opt/gym_torcs/autostart.sh')
         time.sleep(0.5)
 
         """
@@ -218,7 +218,7 @@ class TorcsEnv:
         else:
             os.system(self.xvfb_command + ' torcs -nofuel -nodamage -nolaptime &')
         time.sleep(0.5)
-        os.system('sh autostart.sh')
+        os.system('sh /opt/gym_torcs/autostart.sh')
         time.sleep(0.5)
 
     def agent_to_torcs(self, u):

@@ -183,7 +183,7 @@ class Client():
                     else:
                         os.system(self.xvfb_command + ' torcs -nofuel -nodamage -nolaptime -vision &')
                     time.sleep(1.0)
-                    os.system('sh autostart.sh')
+                    os.system('sh /opt/gym_torcs/autostart.sh')
                     n_fail = 5
                 n_fail -= 1
 
